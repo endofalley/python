@@ -37,5 +37,5 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}
     echo "conda activate base" >> ~/.bashrc && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
-    /opt/conda/bin/conda install -y python:3.6.8 flask h5py pandas keras tensorflow matplotlib pywavelets gevent scikit-learn flask-cors pymongo \
+    /opt/conda/bin/conda install -y python:3.6.8 flask h5py pandas keras tensorflow matplotlib pywavelets gevent scikit-learn flask-cors pymongo && \
     /opt/conda/bin/conda clean -afy
