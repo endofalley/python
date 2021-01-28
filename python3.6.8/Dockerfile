@@ -16,7 +16,9 @@ RUN apt-get update -q && \
         mercurial \
         subversion \
         wget \
-    && apt-get clean
+        unzip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV PATH /opt/conda/bin:$PATH
 
@@ -39,3 +41,16 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     /opt/conda/bin/conda install -y python=3.6.8 flask h5py pandas keras tensorflow matplotlib pywavelets gevent scikit-learn flask-cors pymongo && \
     /opt/conda/bin/conda clean -afy
+
+RUN mkdir /mcr-install && \
+    mkdir /opt/mcr && \
+    cd /mcr-install && \
+    wget http://ssd.mathworks.com/supportfiles/downloads/R2018b/deployment_files/R2018b/installers/glnxa64/MCR_R2018b_glnxa64_installer.zip && \
+    unzip -q MCR_R2018b_glnxa64_installer.zip && \
+    ./install -destinationFolder /opt/mcr -agreeToLicense yes -mode silent && \
+    cd / && \
+    rm -rf mcr-install
+
+ENV LD_LIBRARY_PATH=/opt/mcr/v95/runtime/glnxa64:/opt/mcr/v95/bin/glnxa64:/opt/mcr/v95/sys/os/glnxa64:/opt/mcr/v95/extern/bin/glnxa64
+ENV MCR_CACHE_VERBOSE=true
+ENV MCR_CACHE_ROOT=/tmp
