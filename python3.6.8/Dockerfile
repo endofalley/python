@@ -45,7 +45,8 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${CONDA_VERSION}
 RUN /opt/conda/bin/conda create -n tensorflow:2.3.1 --clone base && \
     source activate tensorflow:2.3.1 && \
     /opt/conda/bin/conda install -y tensorflow=2.3.1 && \
-    source activate base
+    source activate base && \
+    /opt/conda/bin/conda clean -afy
 
 RUN mkdir /mcr-install && \
     mkdir /opt/mcr && \
