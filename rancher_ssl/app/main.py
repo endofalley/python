@@ -24,15 +24,21 @@ def updata_ssl(container_id):
     # 获取证书剩余天数
     exec_result=container.exec_run("openssl x509 -in /var/lib/rancher/management-state/tls/localhost.crt -noout -enddate")
     end_time=parse(str(exec_result[1],encoding='utf-8').split('=')[1])
+    
     now=datetime.datetime.now(tz=tzutc())
+    print("当前时间为: {}".format(now.strftime("%Y-%m-%d %H:%M:%S")))
+    print("证书到期时间为: {}".format(end_time.strftime("%Y-%m-%d %H:%M:%S")))
     # 证书剩余天数
     remain_day=(end_time-now).days
     # 剩余天数小于15天，更新证书
     if(remain_day<=15):
+        print("开始备份证书... ...")
         # 备份证书
         container.exec_run("mv /var/lib/rancher/management-state/tls/localhost.crt /var/lib/rancher/management-state/tls/localhost.crt.{}".format(now.strftime("%Y%m%d%H%M%S")))
+        print("开始更新证书... ...")
         # 更新证书
         container.restart()
+        print("证书更新完成")
 def main(container_id):
     timez = pytz.timezone('Asia/Shanghai')
     scheduler=BlockingScheduler(timezone=timez)
